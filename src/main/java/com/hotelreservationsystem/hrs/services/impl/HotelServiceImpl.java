@@ -18,7 +18,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class HotelServiceImpl {
+public class HotelServiceImpl implements HotelService {
+    @Autowired
+    MongoService mongoService;
+    @Override
+    public void createHotels(CreateHotelsDTO dto) {
 
+        for(Hotelpojo ht:dto.getHotels()){
+            Hotel hotel = new Hotel();
+            hotel.setHotelName(ht.getHotelName());
+            hotel.setHotelLocation(ht.getHotelLocation());
+            hotel.setHotelPricePerNight(ht.getHotelPricePerNight());
+            mongoService.save(hotel,"hotels");
+        }
+
+    }
+
+    @Override
+    public List<Hotel> filterHotels(HotelFilter hotelFilter) {
+        Query query = new Query();
+
+        List<Reservation> reservations = mongoService.find(hotelFilter.toQuery(), Reservation.class);
+
+        if(reservations != null){
+            List<String> hotelIds = reservations.stream().map(Reservation::getResHotelId).toList();
+            query.addCriteria(Criteria.where("_id").nin(hotelIds));
+        }
+
+        List<Hotel> hotels = mongoService.find(query, Hotel.class);
+        hotels.forEach(hotel -> hotel.setHotelAvailability(true));
+        return hotels;
+    }
 }
 
