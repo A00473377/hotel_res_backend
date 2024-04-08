@@ -19,5 +19,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/hotels")
 public class HotelController {
+    private final HotelService hotelService;
 
+    @Autowired
+    public HotelController(HotelService hotelService) {
+        this.hotelService = hotelService;
+    }
+
+    @PostMapping
+    public ResponseEntity<String> createHotels(HttpServletRequest http, @RequestBody CreateHotelsDTO createHotelsDTO) {
+        hotelService.createHotels(createHotelsDTO);
+        return new ResponseEntity<>("Hotel created successfully", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<List<Hotel>> hotelFilter(HttpServletRequest http, @RequestBody HotelFilter hotelFilter) {
+        List<Hotel> filteredHotels = hotelService.filterHotels(hotelFilter);
+        return new ResponseEntity<>(filteredHotels, HttpStatus.OK);
+    }
 }
