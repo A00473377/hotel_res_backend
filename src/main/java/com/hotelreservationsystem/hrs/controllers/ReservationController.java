@@ -14,8 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/reservation")
 public class ReservationController {
+    private final ReservationService reservationService;
 
+    @Autowired
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
+    @PostMapping
+    public ResponseEntity<String> createReservation(HttpServletRequest http, @RequestBody CreateReservationDTO createReservationDTO) {
+        String resId = reservationService.createReservation(createReservationDTO);
+        return new ResponseEntity<>("Reservation created successfully! Reservation ID: " + resId, HttpStatus.CREATED);
+    }
 }
 
 
