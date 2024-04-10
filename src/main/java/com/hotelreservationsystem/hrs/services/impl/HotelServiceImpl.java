@@ -8,6 +8,7 @@ import com.hotelreservationsystem.hrs.models.Reservation;
 import com.hotelreservationsystem.hrs.pojo.Hotelpojo;
 import com.hotelreservationsystem.hrs.services.HotelService;
 import com.hotelreservationsystem.hrs.services.MongoService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -48,6 +49,13 @@ public class HotelServiceImpl implements HotelService {
         List<Hotel> hotels = mongoService.find(query, Hotel.class);
         hotels.forEach(hotel -> hotel.setHotelAvailability(true));
         return hotels;
+    }
+
+    @Override
+    public Hotel getHotelById(ObjectId hotelId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(hotelId));
+        return mongoService.findOne(query, Hotel.class);
     }
 }
 
