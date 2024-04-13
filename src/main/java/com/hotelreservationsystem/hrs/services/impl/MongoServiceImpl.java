@@ -26,7 +26,7 @@ public class MongoServiceImpl implements MongoService{
 
     @Override
     public <T> T save(T entity, String collectionName) {
-        return null;
+        return mongoTemplate.save(entity,collectionName);
     }
 
 

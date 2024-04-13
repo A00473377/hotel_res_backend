@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Data
 public class HotelFilter  {
 
-    private Date checkinDate;
-    private Date checkoutDate;
+    private String checkinDate;
+    private String checkoutDate;
 
 
     public Query toQuery(){
