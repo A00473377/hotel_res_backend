@@ -1,5 +1,6 @@
 package com.hotelreservationsystem.hrs.services;
 
+import com.hotelreservationsystem.hrs.models.Hotel;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +12,6 @@ public interface MongoService {
 
     <T> List<T> find(Query query, Class<T> entityClass);
 
+    <T> T findOne(Query query, Class<T> entityClass);
 }
 
